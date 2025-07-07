@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>現在地を取得中...</title>
+  <script>
+    window.onload = function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(currentPosition) {
+          const lat = currentPosition.coords.latitude;
+          const lng = currentPosition.coords.longitude;
+          const position = lat + "," + lng;
+          const urlParams = new URLSearchParams(window.location.search);
+          const genreId = urlParams.get('genre_id');
+          if (! genreId) {
+              window.location.href = 'https://epark.jp/notfound';
+          }
+          //const genreId = 110000;
+          // 取得した位置情報をURLに含めてEPARKなどにリダイレクト
+          //window.location.href = `https://epark.jp/search/gps/list/?position=${position}&genre_id=${genreId}&radius=0.8`;
+          console.log(genreId);
+        }, function(error) {
+          alert("位置情報の取得に失敗しました。");
+        });
+      } else {
+        alert("お使いのブラウザは位置情報取得に対応していません。");
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>現在地を取得中です...</p>
+</body>
+</html>
