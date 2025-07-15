@@ -14,9 +14,8 @@
           if (! genreId) {
               window.location.href = 'https://epark.jp/notfound';
           }
-          if (genreId && genreId.startsWith('https://epark.jp/')) {
-            window.location.href = genreId;
-            return;
+          if (!/^[1-9]\d*$/.test(genreId)) {
+            window.location.href = 'https://epark.jp/notfound';
           }
           //const genreId = 110000;
           // 取得した位置情報をURLに含めてEPARKなどにリダイレクト
