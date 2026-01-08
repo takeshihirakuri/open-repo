@@ -57,7 +57,10 @@
 	function openInSafari() {
 	  // Safariを指定することはできないため
 	  // 通常のURL遷移を行う
-	  window.location.href = window.location.href;
+	  const url = location.href.replace(/^https?:\/\//, '');
+	  const intentUrl =
+	    `x-safari-https://${url}`;
+	  window.location.href = intentUrl;
 	}
 </script>
 <body>
