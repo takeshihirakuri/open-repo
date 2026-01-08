@@ -1,0 +1,79 @@
+<html lang="ja">
+<style>
+    form button {
+        line-height: 2.8em;
+        width: 80%;
+        margin-left: 10%;
+        background-color: #E6E6E6;
+        border: 0px;
+        color: #424242;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 4px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    form button:hover {
+        opacity: 0.8;
+    }
+</style>
+<script type="text/javascript">
+    function startApp() {
+        window.location="eparkextapp://login";
+    }
+	function isAndroid() {
+	  return /Android/i.test(navigator.userAgent);
+	}
+
+	function isIOS() {
+	  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+	}
+
+	document.addEventListener('DOMContentLoaded', () => {
+	  if (isAndroid()) {
+	    document.getElementById('chromeOpenBtn').style.display = 'block';
+	  }
+
+	  if (isIOS()) {
+	    document.getElementById('safariOpenBtn').style.display = 'block';
+	  }
+	});
+
+	/**
+	 * Android：Chrome指定起動
+	 */
+	function openInChrome() {
+	  const url = location.href.replace(/^https?:\/\//, '');
+	  const intentUrl =
+	    `intent://${url}#Intent;scheme=https;package=com.android.chrome;end`;
+
+	  location.href = intentUrl;
+	}
+
+	/**
+	 * iOS：Safariで開く（通常遷移）
+	 */
+	function openInSafari() {
+	  // Safariを指定することはできないため
+	  // 通常のURL遷移を行う
+	  window.location.href = window.location.href;
+	}
+</script>
+<body>
+<div>
+    <form id="form" action="#" onsubmit="startApp();return false;">
+        <button type="submit">EPARKアプリに戻る</button>
+    </form>
+	<button id="chromeOpenBtn" style="display:none;" onclick="openInChrome()">
+	  Chromeで開く
+	</button>
+
+	<button id="safariOpenBtn" style="display:none;" onclick="openInSafari()">
+	  Safariで開く
+	</button>
+</div>
+</body>
+</html>
+
+
