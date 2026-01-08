@@ -1,6 +1,10 @@
 <html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    form button {
+    /* 既存のスタイルを維持しつつ調整 */
+    button, form button {
         line-height: 2.8em;
         width: 80%;
         margin-left: 10%;
@@ -12,73 +16,106 @@
         border-radius: 4px;
         margin-top: 8px;
         margin-bottom: 8px;
+        display: block; /* ボタンを縦に並べる */
+        cursor: pointer;
     }
 
-    form button:hover {
+    button:hover, form button:hover {
         opacity: 0.8;
     }
-</style>
-<script type="text/javascript">
-    function startApp() {
-        //window.location="eparkextapp://login";
-		alert("1");
-		window.location="intent://login#Intent;scheme=eparkextapp;package=login;end;";
+
+    .container {
+        padding-top: 20px;
     }
-	function isAndroid() {
-	  return /Android/i.test(navigator.userAgent);
-	}
-
-	function isIOS() {
-	  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-	}
-
-	document.addEventListener('DOMContentLoaded', () => {
-	  if (isAndroid()) {
-	    document.getElementById('chromeOpenBtn').style.display = 'block';
-	  }
-
-	  if (isIOS()) {
-	    document.getElementById('safariOpenBtn').style.display = 'block';
-	  }
-	});
-
-	/**
-	 * Android：Chrome指定起動
-	 */
-	function openInChrome() {
-	  const url = location.href.replace(/^https?:\/\//, '');
-	  const intentUrl =
-	    `intent://${url}#Intent;scheme=https;package=com.android.chrome;end`;
-
-	  location.href = intentUrl;
-	}
-
-	/**
-	 * iOS：Safariで開く（通常遷移）
-	 */
-	function openInSafari() {
-	  // Safariを指定することはできないため
-	  // 通常のURL遷移を行う
-	  const url = location.href.replace(/^https?:\/\//, '');
-	  const intentUrl =
-	    `googlechrome://${url}`;
-	  window.location.href = intentUrl;
-	}
-</script>
+</style>
+</head>
 <body>
-<div>
+<div class="container">
     <form id="form" action="#" onsubmit="startApp();return false;">
         <button type="submit">EPARKアプリに戻る_v2</button>
     </form>
-	<button id="chromeOpenBtn" style="display:none;" onclick="openInChrome()">
-	  Chromeで開く
-	</button>
 
-	<button id="safariOpenBtn" style="display:none;" onclick="openInSafari()">
-	  Safariで開く
-	</button>
+    <button type="button" onclick="startAppWithAnchor()">aタグシュミレート</button>
+
+    <button type="button" onclick="startAppWithIframe()">iframe</button>
+
+    <button id="chromeOpenBtn" style="display:none;" onclick="openInChrome()">
+        Chromeで開く
+    </button>
+
+    <button id="safariOpenBtn" style="display:none;" onclick="openInSafari()">
+        Safariで開く
+    </button>
 </div>
+
+<script type="text/javascript">
+    const SCHEME_URL = "eparkextapp://login";
+    // 注意: package= の後には実際のAndroidパッケージ名を入れてください
+    const INTENT_URL = "intent://login#Intent;scheme=eparkextapp;package=【ここにパッケージ名】;end;";
+
+    function startApp() {
+        alert("Intentスキームを実行します");
+        window.location = INTENT_URL;
+    }
+
+    /**
+     * ① <a> タグのクリックをシミュレート
+     * 直接window.locationを書き換えるのを嫌うブラウザ（WebView）対策
+     */
+    function startAppWithAnchor() {
+        alert("aタグシュミレートを実行します");
+        const a = document.createElement('a');
+        a.href = SCHEME_URL;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+        }, 100);
+    }
+
+    /**
+     * ② iframe を使用する
+     * ページ遷移を発生させずにスキームを叩く古い手法
+     */
+    function startAppWithIframe() {
+        alert("iframe方式を実行します");
+        const iframe = document.createElement('iframe');
+        iframe.src = SCHEME_URL;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+        }, 500);
+    }
+
+    /* 判定ロジック（既存） */
+    function isAndroid() {
+      return /Android/i.test(navigator.userAgent);
+    }
+
+    function isIOS() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (isAndroid()) {
+        document.getElementById('chromeOpenBtn').style.display = 'block';
+      }
+      if (isIOS()) {
+        document.getElementById('safariOpenBtn').style.display = 'block';
+      }
+    });
+
+    function openInChrome() {
+      window.location.href = SCHEME_URL;
+    }
+
+    function openInSafari() {
+      const url = location.href.replace(/^https?:\/\//, '');
+      const intentUrl = `googlechrome://${url}`;
+      window.location.href = intentUrl;
+    }
+</script>
 </body>
 </html>
-
-
