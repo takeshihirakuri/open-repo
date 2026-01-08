@@ -108,13 +108,13 @@
       }
     });
     
-    function openInChrome() {
-        // 構造: intent://[スキーム直後のパス]#Intent;scheme=[スキーム];package=com.android.chrome;end;
-        // 今回は eparkextapp://login なので以下のようになります
-        const intentUrl = "intent://login#Intent;scheme=eparkextapp;package=com.android.chrome;end;";
-        
-        window.location.href = intentUrl;
-    }
+	function openInChrome() {
+	  const url = location.href.replace(/^https?:\/\//, '');
+	  const intentUrl =
+	    `intent://${url}#Intent;scheme=https;package=com.android.chrome;end`;
+
+	  location.href = intentUrl;
+	}
 
     function openInSafari() {
       const url = location.href.replace(/^https?:\/\//, '');
