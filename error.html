@@ -106,9 +106,13 @@
         document.getElementById('safariOpenBtn').style.display = 'block';
       }
     });
-
+    
     function openInChrome() {
-      window.location.href = SCHEME_URL;
+        // 構造: intent://[スキーム直後のパス]#Intent;scheme=[スキーム];package=com.android.chrome;end;
+        // 今回は eparkextapp://login なので以下のようになります
+        const intentUrl = "intent://login#Intent;scheme=eparkextapp;package=com.android.chrome;end;";
+        
+        window.location.href = intentUrl;
     }
 
     function openInSafari() {
